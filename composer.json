@@ -15,7 +15,9 @@
         "issues": "http://github.com/Baptouuuu/Spreadsheet/issues"
     },
     "require": {
-        "php": "~7.0"
+        "php": "~7.0",
+        "innmind/immutable": "^1.9",
+        "innmind/filesystem": "^1.2"
     },
     "autoload": {
         "psr-4": {
