@@ -8,7 +8,6 @@ use Spreadsheet\{
     Exception\InvalidArgumentException,
     SheetInterface,
     RowInterface,
-    CellInterface,
     File\Csv
 };
 use Innmind\Filesystem\{
@@ -67,14 +66,7 @@ final class CsvWriter implements WriterInterface
                 function($carry, $identifier, RowInterface $row) {
                     fputcsv(
                         $carry,
-                        $row->cells()->reduce(
-                            [],
-                            function(array $carry, $column, CellInterface $cell): array {
-                                $carry[] = $cell->value();
-
-                                return $carry;
-                            }
-                        ),
+                        $row->cells()->values()->toPrimitive(),
                         $this->delimiter
                     );
 
