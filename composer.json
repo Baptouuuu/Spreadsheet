@@ -1,0 +1,26 @@
+{
+    "name": "baptouuuu/spreadsheet",
+    "type": "library",
+    "description": "Spreadsheet object representation",
+    "keywords": ["spreadsheet"],
+    "homepage": "http://github.com/Baptouuuu/Spreadsheet",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Baptiste Langlade",
+            "email": "langlade.baptiste@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "http://github.com/Baptouuuu/Spreadsheet/issues"
+    },
+    "require": {
+        "php": "~7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spreadsheet\\": "src/",
+            "Tests\\Spreadsheet\\": "tests/"
+        }
+    }
+}
