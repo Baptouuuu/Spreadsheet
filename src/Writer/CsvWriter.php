@@ -55,7 +55,7 @@ final class CsvWriter implements WriterInterface
 
     private function buildFile(SheetInterface $sheet): FileInterface
     {
-        $csv = fopen('php://temp', 'r+');
+        $csv = tmpfile();
         $columns = $sheet
             ->columns()
             ->keys()
