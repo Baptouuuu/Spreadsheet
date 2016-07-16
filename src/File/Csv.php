@@ -14,7 +14,7 @@ final class Csv extends File
     public function __construct(string $name, StreamInterface $content)
     {
         parent::__construct(
-            $name.'.csv',
+            basename($name, '.csv').'.csv',
             $content,
             MediaType::fromString('text/csv')
         );

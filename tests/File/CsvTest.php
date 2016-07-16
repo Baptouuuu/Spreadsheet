@@ -19,5 +19,10 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('foo.csv', (string) $csv->name());
         $this->assertSame('bar', (string) $csv->content());
         $this->assertSame('text/csv', (string) $csv->mediaType());
+
+        $this->assertSame(
+            'foo.csv',
+            (string) (new Csv('foo.csv', new StringStream('')))->name()
+        );
     }
 }
