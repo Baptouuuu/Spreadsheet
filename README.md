@@ -2,7 +2,7 @@
 
 | `master` | `develop` |
 |----------|-----------|
-| [[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/?branch=master) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/?branch=develop) |
+| [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/?branch=master) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/?branch=develop) |
 | [![Code Coverage](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/?branch=master) | [![Code Coverage](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/?branch=develop) |
 | [![Build Status](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/build-status/master) | [![Build Status](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/Baptouuuu/Spreadsheet/build-status/develop) |
 
