@@ -8,6 +8,7 @@ use Spreadsheet\{
     Exception\InvalidArgumentException,
     SheetInterface,
     RowInterface,
+    CellInterface,
     File\Csv
 };
 use Innmind\Filesystem\{
@@ -15,6 +16,7 @@ use Innmind\Filesystem\{
     Directory,
     Stream\Stream
 };
+use Innmind\Immutable\MapInterface;
 
 final class CsvWriter implements WriterInterface
 {
@@ -54,19 +56,31 @@ final class CsvWriter implements WriterInterface
     private function buildFile(SheetInterface $sheet): FileInterface
     {
         $csv = fopen('php://temp', 'r+');
+        $columns = $sheet
+            ->columns()
+            ->keys()
+            ->sort(function($a, $b): bool {
+                return $a > $b;
+            })
+            ->toPrimitive();
+        $default = array_fill_keys(array_values($columns), '');
 
         if ($this->withHeader) {
-            fputcsv($csv, $sheet->columns()->keys()->toPrimitive(), $this->delimiter);
+            fputcsv($csv, $columns, $this->delimiter);
         }
 
         $sheet
             ->rows()
+            ->values()
+            ->sort(function(RowInterface $a, RowInterface $b): bool {
+                return $a->identifier() > $b->identifier();
+            })
             ->reduce(
                 $csv,
-                function($carry, $identifier, RowInterface $row) {
+                function($carry, RowInterface $row) use ($default) {
                     fputcsv(
                         $carry,
-                        $row->cells()->values()->toPrimitive(),
+                        $this->fill($default, $row->cells()),
                         $this->delimiter
                     );
 
@@ -75,5 +89,19 @@ final class CsvWriter implements WriterInterface
             );
 
         return new Csv($sheet->name(), new Stream($csv));
+    }
+
+    private function fill(array $default, MapInterface $cells): array
+    {
+        $line = $cells->reduce(
+            $default,
+            function(array $carry, $column, CellInterface $cell): array {
+                $carry[$column] = (string) $cell;
+
+                return $carry;
+            }
+        );
+
+        return array_values($line);
     }
 }

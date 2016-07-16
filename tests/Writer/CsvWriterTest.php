@@ -189,4 +189,45 @@ CSV
             (string) $file->content()
         );
     }
+
+    public function testWriteWithMissingCells()
+    {
+        $writer = new CsvWriter(';', false);
+
+        $file = $writer->write(
+            (new Spreadsheet('spreadsheet'))
+                ->add(
+                    (new Sheet('sheet'))
+                        ->add(
+                            new Cell(
+                                new Position('A', 2),
+                                'a2'
+                            )
+                        )
+                        ->add(
+                            new Cell(
+                                new Position('B', 1),
+                                'b1'
+                            )
+                        )
+                        ->add(
+                            new Cell(
+                                new Position('C', 2),
+                                'c2'
+                            )
+                        )
+                )
+        );
+
+        $this->assertInstanceOf(Csv::class, $file);
+        $this->assertSame('sheet.csv', (string) $file->name());
+        $this->assertSame(<<<CSV
+;b1;
+a2;;c2
+
+CSV
+            ,
+            (string) $file->content()
+        );
+    }
 }
