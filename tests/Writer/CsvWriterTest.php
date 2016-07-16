@@ -10,22 +10,34 @@ use Spreadsheet\{
     Sheet,
     Cell,
     Position,
-    File\Csv
+    File\Csv,
+    Formatter\FormatterInterface,
+    Formatter\DateFormatter,
+    Cell\DateCell
 };
 use Innmind\Filesystem\DirectoryInterface;
+use Innmind\Immutable\Map;
 
 class CsvWriterTest extends \PHPUnit_Framework_TestCase
 {
     public function testInterface()
     {
-        $writer = new CsvWriter(';', true);
+        $writer = new CsvWriter(
+            ';',
+            true,
+            new Map('string', FormatterInterface::class)
+        );
 
         $this->assertInstanceOf(WriterInterface::class, $writer);
     }
 
     public function testWriteSingleFile()
     {
-        $writer = new CsvWriter(';', true);
+        $writer = new CsvWriter(
+            ';',
+            true,
+            new Map('string', FormatterInterface::class)
+        );
 
         $file = $writer->write(
             (new Spreadsheet('spreadsheet'))
@@ -73,7 +85,11 @@ CSV
 
     public function testWriteSingleFileWithoutHeader()
     {
-        $writer = new CsvWriter(';', false);
+        $writer = new CsvWriter(
+            ';',
+            false,
+            new Map('string', FormatterInterface::class)
+        );
 
         $file = $writer->write(
             (new Spreadsheet('spreadsheet'))
@@ -120,7 +136,11 @@ CSV
 
     public function testWriteDirectory()
     {
-        $writer = new CsvWriter(';', true);
+        $writer = new CsvWriter(
+            ';',
+            true,
+            new Map('string', FormatterInterface::class)
+        );
 
         $directory = $writer->write(
             (new Spreadsheet('spreadsheet'))
@@ -192,7 +212,11 @@ CSV
 
     public function testWriteWithMissingCells()
     {
-        $writer = new CsvWriter(';', false);
+        $writer = new CsvWriter(
+            ';',
+            false,
+            new Map('string', FormatterInterface::class)
+        );
 
         $file = $writer->write(
             (new Spreadsheet('spreadsheet'))
@@ -236,6 +260,52 @@ CSV
      */
     public function testThrowWhenEmptyDelimiter()
     {
-        new CsvWriter('', false);
+        new CsvWriter(
+            '',
+            false,
+            new Map('string', FormatterInterface::class)
+        );
+    }
+
+    /**
+     * @expectedException Spreadsheet\Exception\InvalidArgumentException
+     */
+    public function testThrowWhenInvalidFormatterMap()
+    {
+        new CsvWriter(
+            ';',
+            false,
+            new Map('string', 'object')
+        );
+    }
+
+    public function testWriteWithCorrectFormat()
+    {
+        $writer = new CsvWriter(
+            ';',
+            false,
+            (new Map('string', FormatterInterface::class))
+                ->put(
+                    DateCell::class,
+                    new DateFormatter('d/m/Y')
+                )
+        );
+
+        $file = $writer->write(
+            (new Spreadsheet('foo'))
+                ->add(
+                    (new Sheet('foo'))->add(
+                        new DateCell(
+                            new Position(1, 1),
+                            new \DateTimeImmutable('2016-07-14')
+                        )
+                    )
+                )
+        );
+
+        $this->assertSame(
+            '14/07/2016' . "\n",
+            (string) $file->content()
+        );
     }
 }

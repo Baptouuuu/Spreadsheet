@@ -9,7 +9,8 @@ use Spreadsheet\{
     SheetInterface,
     RowInterface,
     CellInterface,
-    File\Csv
+    File\Csv,
+    Formatter\FormatterInterface
 };
 use Innmind\Filesystem\{
     FileInterface,
@@ -23,14 +24,22 @@ final class CsvWriter implements WriterInterface
     private $delimiter;
     private $withHeader;
 
-    public function __construct(string $delimiter, bool $withHeader)
-    {
-        if (empty($delimiter)) {
+    public function __construct(
+        string $delimiter,
+        bool $withHeader,
+        MapInterface $formatters
+    ) {
+        if (
+            empty($delimiter) ||
+            (string) $formatters->keyType() !== 'string' ||
+            (string) $formatters->valueType() !== FormatterInterface::class
+        ) {
             throw new InvalidArgumentException;
         }
 
         $this->delimiter = $delimiter;
         $this->withHeader = $withHeader;
+        $this->formatters = $formatters;
     }
 
     public function write(SpreadsheetInterface $spreadsheet): FileInterface
@@ -96,7 +105,16 @@ final class CsvWriter implements WriterInterface
         $line = $cells->reduce(
             $default,
             function(array $carry, $column, CellInterface $cell): array {
-                $carry[$column] = (string) $cell;
+                $class = get_class($cell);
+
+                if ($this->formatters->contains($class)) {
+                    $carry[$column] = $this
+                        ->formatters
+                        ->get($class)
+                        ->format($cell);
+                } else {
+                    $carry[$column] = (string) $cell;
+                }
 
                 return $carry;
             }
