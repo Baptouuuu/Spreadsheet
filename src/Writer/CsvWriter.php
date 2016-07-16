@@ -23,6 +23,7 @@ final class CsvWriter implements WriterInterface
 {
     private $delimiter;
     private $withHeader;
+    private $formatters;
 
     public function __construct(
         string $delimiter,
