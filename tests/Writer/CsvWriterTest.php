@@ -230,4 +230,12 @@ CSV
             (string) $file->content()
         );
     }
+
+    /**
+     * @expectedException Spreadsheet\Exception\InvalidArgumentException
+     */
+    public function testThrowWhenEmptyDelimiter()
+    {
+        new CsvWriter('', false);
+    }
 }

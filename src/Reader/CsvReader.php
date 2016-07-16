@@ -7,6 +7,7 @@ use Spreadsheet\{
     SpreadsheetInterface,
     Spreadsheet,
     Exception\NestedDirectoryReadNotSupportedException,
+    Exception\InvalidArgumentException,
     SheetInterface,
     Sheet,
     Cell,
@@ -26,6 +27,10 @@ final class CsvReader implements ReaderInterface
         string $delimiter,
         bool $useFirstLineAsColumnIdentifier
     ) {
+        if (empty($delimiter)) {
+            throw new InvalidArgumentException;
+        }
+
         $this->delimiter = $delimiter;
         $this->useFirstLineAsColumnIdentifier = $useFirstLineAsColumnIdentifier;
     }

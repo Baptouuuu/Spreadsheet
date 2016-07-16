@@ -197,4 +197,12 @@ CSV
             )
         );
     }
+
+    /**
+     * @expectedException Spreadsheet\Exception\InvalidArgumentException
+     */
+    public function testThrowWhenEmptyDelimiter()
+    {
+        new CsvReader('', false);
+    }
 }
